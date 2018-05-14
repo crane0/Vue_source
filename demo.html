@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<button>df</button>
+<script>
+  var arr = [1,2,3,4,5,6]
+  var result = []
+  arr.forEach(item => item%2 === 0?result.unshift(item):result.push(item))
+  console.log(result)
+  //三目
+
+  var btn = document.querySelector('button')
+  btn.onclick = function () {
+    alert(13)
+  }
+  var a
+  var b = 1
+  var c = 2
+  a = b = c
+  console.log(a,b,c)
+</script>
+</body>
+</html>
