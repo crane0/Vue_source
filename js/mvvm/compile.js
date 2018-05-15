@@ -142,17 +142,31 @@ var compileUtil = {
     this.bind(node, vm, exp, 'html');
   },
 
+
+
+  /*
+  * 双向的数据绑定，建立在单项数据绑定的基础上
+  *   给元素添加了input监听，
+  * */
   model: function (node, vm, exp) {
+    //实现页面的初始化显示
     this.bind(node, vm, exp, 'model');
 
     var me = this,
+      //得到表达式的值
       val = this._getVMVal(vm, exp);
+    //输入数据发生改变时，调用这个回调函数
     node.addEventListener('input', function (e) {
+      //读取输入框最新的数据
       var newValue = e.target.value;
       if (val === newValue) {
         return;
       }
 
+      /*
+      * 将最新的值，保存到表达式对应的属性上，
+      * 会导致observer.js中，set方法的调用，更新界面对应的节点
+      * */
       me._setVMVal(vm, exp, newValue);
       val = newValue;
     });
@@ -168,10 +182,10 @@ var compileUtil = {
     var updaterFn = updater[dir + 'Updater'];
     // 执行更新函数更新节点
     updaterFn && updaterFn(node, this._getVMVal(vm, exp));
-
+    //上面2个语句是初始化显示！！！
 
     /*
-    * 真正的更新，上面2个语句是初始化显示！！！
+    * 真正的更新
     * 更新表达式（大括号表达式/非事件指令表达式），对应的节点
     *   每一个表达式都有对应的watcher对象
     *   当exp相关的属性（a.b.c中任意一个，注意必须是a的b，b的c）发生改变时，回调函数执行
@@ -249,7 +263,7 @@ var updater = {
     node.className = className + space + value;
   },
 
-  // 更新节点的value属性
+  // 更新节点的value属性，node就是input输入框
   modelUpdater: function (node, value, oldValue) {
     node.value = typeof value == 'undefined' ? '' : value;
   }
