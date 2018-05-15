@@ -162,13 +162,22 @@ var compileUtil = {
     this.bind(node, vm, exp, 'class');
   },
 
-  // 调用对应的节点更新函数，去更新节点
+  // 调用对应的节点更新函数，去更新节点（非事件处理）
   bind: function (node, vm, exp, dir) {
     // 根据指令名得到对应的节点更新函数
     var updaterFn = updater[dir + 'Updater'];
     // 执行更新函数更新节点
     updaterFn && updaterFn(node, this._getVMVal(vm, exp));
 
+
+    /*
+    * 真正的更新，上面2个语句是初始化显示！！！
+    * 更新表达式（大括号表达式/非事件指令表达式），对应的节点
+    *   每一个表达式都有对应的watcher对象
+    *   当exp相关的属性（a.b.c中任意一个，注意必须是a的b，b的c）发生改变时，回调函数执行
+    *
+    * 指定用于更新节点的回调函数，
+    * */
     new Watcher(vm, exp, function (value, oldValue) {
       updaterFn && updaterFn(node, value, oldValue);
     });

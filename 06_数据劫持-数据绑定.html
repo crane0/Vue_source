@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>06_数据劫持-数据绑定</title>
+  <!--
+    1. 数据绑定
+      * 初始化显示: 页面(表达式/指令)能从data读取数据显示 (编译/解析)
+      * 更新显示: 更新data中的属性数据==>页面更新
+  -->
+</head>
+<body>
+
+<div id="test">
+  <p>{{name}}</p>
+  <p v-text="name"></p>
+  <p>{{gf.name}}</p>
+  <button v-on:click="update">更新</button>
+</div>
+
+<script>
+  /*
+  * watcher对象，在compile.js中175行左右调用
+  *   每一个表达式（大括号表达式/非事件指令表达式），都有对应的watcher对象
+  * Dep对象，observe.js中30行左右调用
+  *   data中所有层次属性的个数
+  *
+  * 表达式与data中的属性，是一对多的关系， 1：n
+  *
+  * watcher与dep : n:n，
+  *   那一个watcher什么情况对应多个dep？
+  *     表达式中，关联的属性 >1时（多层表达式），    用对象
+  *   那一个dep什么情况对应多个watcher？
+  *     多个表达式，使用了同一个属性    用数组
+  * */
+
+  const vm = new MVVM({
+    el: '#test',
+    data: {
+      name: 'DAMU',
+      gf: {
+        name: 'binbin',
+        age: 18
+      }
+    },
+
+    methods: {
+      update () {
+        this.name = 'SADAMU'
+        // this.gf.name = 'fanfan'
+      }
+    }
+  })
+</script>
+</body>
+</html>

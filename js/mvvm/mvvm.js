@@ -17,6 +17,7 @@ function MVVM(options) {
     me._proxy(key);
   });
 
+  //用于数据劫持/监视
   observe(data, this);
 
   /*
