@@ -93,7 +93,7 @@ Compile.prototype = {
       if (me.isDirective(attrName)) {
         //获取指令的属性值
         var exp = attr.value;
-        //过滤了属性名（v-被去除了）
+        //过滤了属性名（v-被去除了），指令名不包括v-
         var dir = attrName.substring(2);
         // 事件指令，以on开头
         if (me.isEventDirective(dir)) {
@@ -137,7 +137,7 @@ var compileUtil = {
   text: function (node, vm, exp) {
     this.bind(node, vm, exp, 'text');
   },
-
+  //解析v-html
   html: function (node, vm, exp) {
     this.bind(node, vm, exp, 'html');
   },
@@ -157,7 +157,7 @@ var compileUtil = {
       val = newValue;
     });
   },
-
+  //解析v-class
   class: function (node, vm, exp) {
     this.bind(node, vm, exp, 'class');
   },
@@ -174,12 +174,15 @@ var compileUtil = {
     });
   },
 
-  // 事件处理 exp指令属性值，dir指令属性名
+  // 事件处理 exp指令属性值（也就是表达式），dir指令属性名
   eventHandler: function (node, vm, exp, dir) {
+    //例，dir为on:click，则eventType为click
     var eventType = dir.split(':')[1],
       fn = vm.$options.methods && vm.$options.methods[exp];
 
+    //为了确保
     if (eventType && fn) {
+      //bind会返回新的函数
       node.addEventListener(eventType, fn.bind(vm), false);
     }
   },
