@@ -219,7 +219,7 @@ var compileUtil = {
     var val = vm._data;
     exp = exp.split('.');
     exp.forEach(function (k) {
-      //根据vm._data中对应的属性名，获取属性值
+      //根据vm._data中对应的属性名，层层获取，获取属性值
       val = val[k];
     });
     return val;
@@ -253,9 +253,13 @@ var updater = {
     node.innerHTML = typeof value == 'undefined' ? '' : value;
   },
 
-  // 更新节点的className属性
+  /*
+  * 更新节点的className属性，oldValue初始化时没有
+  *   这里只是实现了v-class来模拟v-bind:class的作用
+  * */
   classUpdater: function (node, value, oldValue) {
     var className = node.className;
+    //每次的oldValue都要被去掉，因为只有新的class就可以了。
     className = className.replace(oldValue, '').replace(/\s$/, '');
 
     var space = className && String(value) ? ' ' : '';

@@ -15,7 +15,7 @@ Observer.prototype = {
         });
     },
     convert: function(key, val) {
-        //对指定的属性，进行数据劫持
+        //对指定的属性，进行数据劫持   Reactive，响应的，随着变化而变化
         this.defineReactive(this.data, key, val);
     },
 
@@ -28,7 +28,7 @@ Observer.prototype = {
     defineReactive: function(data, key, val) {
         /*
         * data中所有层次的属性个数，和dep对象的个数相同
-        *   也就是说，和属性时一一对应的
+        *   也就是说，和属性是一一对应的
         *
         * 当执行这个时，是为了创建一个容器，放watcher
         *   此时watcher还没有创建！
@@ -51,7 +51,7 @@ Observer.prototype = {
             configurable: false, // 不能再define
             /*
             * 用于建立关系，因为第一次watcher还没有创建，所以执行第二次时，有watcher后，建立。
-            *   触发：1，在compile中，170行，180行触发，180行真正有效。
+            *   触发：1，在compile中，170行，180行触发，创建watcher，180行真正有效。
             * */
             get: function() {
                 //如果对应的watcher存在
